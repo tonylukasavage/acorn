@@ -269,6 +269,12 @@
   var _while = {keyword: "while", isLoop: true}, _with = {keyword: "with"}, _new = {keyword: "new", beforeExpr: true};
   var _this = {keyword: "this"};
 
+  // HYPERLOOP - keywords
+
+  var _at_class = {keyword: "@class", beforeExpr: true};
+  var _at_compiler = {keyword: "@compiler", beforeExpr: true};
+  var _at_import = {keyword: "@import", beforeExpr: true};
+
   // The keywords that denote values.
 
   var _null = {keyword: "null", atomValue: null}, _true = {keyword: "true", atomValue: true};
@@ -291,7 +297,12 @@
                       "instanceof": {keyword: "instanceof", binop: 7, beforeExpr: true}, "this": _this,
                       "typeof": {keyword: "typeof", prefix: true, beforeExpr: true},
                       "void": {keyword: "void", prefix: true, beforeExpr: true},
-                      "delete": {keyword: "delete", prefix: true, beforeExpr: true}};
+                      "delete": {keyword: "delete", prefix: true, beforeExpr: true},
+
+                      // HYPERLOOP - keyword types
+
+                      "@class": _at_class, "@compiler": _at_compiler, "@import": _at_import
+                    };
 
   // Punctuation token types. Again, the `type` property is purely for debugging.
 
@@ -696,7 +707,8 @@
     var code = input.charCodeAt(tokPos);
     // Identifier or keyword. '\uXXXX' sequences are allowed in
     // identifiers, so '\' also dispatches to that.
-    if (isIdentifierStart(code) || code === 92 /* '\' */) return readWord();
+    // HYPERLOOP - allow @ to start words
+    if (isIdentifierStart(code) || code === 92 /* '\' */ || code === 64) return readWord();
 
     var tok = getTokenFromCode(code);
 
@@ -873,7 +885,8 @@
     var word, first = true, start = tokPos;
     for (;;) {
       var ch = input.charCodeAt(tokPos);
-      if (isIdentifierChar(ch)) {
+      // HYPERLOOP - allow @ to start words
+      if (isIdentifierChar(ch) || ch === 64) {
         if (containsEsc) word += input.charAt(tokPos);
         ++tokPos;
       } else if (ch === 92) { // "\"
@@ -1584,6 +1597,12 @@
 
     case _new:
       return parseNew();
+
+    case _at_class:
+    case _at_compiler:
+    case _at_import:
+      next();
+      return parseParenExpression();
 
     default:
       unexpected();
