@@ -274,9 +274,9 @@
 
   // HYPERLOOP - keywords
 
-  var _at_class = {keyword: "@class", beforeExpr: true};
-  var _at_compiler = {keyword: "@compiler", beforeExpr: true};
-  var _at_import = {keyword: "@import", beforeExpr: true};
+  var _at_class = {keyword: "@class", label: "HyperloopClass", beforeExpr: true};
+  var _at_compiler = {keyword: "@compiler", label: "HyperloopCompiler", beforeExpr: true};
+  var _at_import = {keyword: "@import", label: "HyperloopImport", beforeExpr: true};
 
   // The keywords that denote values.
 
@@ -1200,6 +1200,15 @@
       node.alternate = eat(_else) ? parseStatement() : null;
       return finishNode(node, "IfStatement");
 
+    case _at_class:
+    case _at_compiler:
+    case _at_import:
+      next();
+      eat(_parenL);
+      node.arguments = parseExprList(_parenR, false);
+      semicolon();
+      return finishNode(node, starttype.label);
+
     case _return:
       if (!inFunction) raise(tokStart, "'return' outside of function");
       next();
@@ -1606,8 +1615,12 @@
     case _at_class:
     case _at_compiler:
     case _at_import:
+      var label = tokType.label;
+      var node = startNode();
       next();
-      return parseParenExpression();
+      eat(_parenL);
+      node.arguments = parseExprList(_parenR, false);
+      return finishNode(node, label);
 
     default:
       unexpected();

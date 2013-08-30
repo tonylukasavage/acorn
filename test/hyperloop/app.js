@@ -1,4 +1,4 @@
-@import('UIKit/UIApplication');
+@import('UIKit/UIApplication', 'another', []);
 @import('Foundation/NSLog');
 
 // should throw an error when uncommented
@@ -8,6 +8,6 @@
 	cflags: ['-DDEBUG=1']
 });
 
-var callback = @class(function(sender) {
+var callback = @class('someClass', ['f','g'], function foo(sender) {
 	NSLog('clicked on button=%@', sender);
 });
