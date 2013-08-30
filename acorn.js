@@ -29,6 +29,9 @@
 
   exports.version = "0.3.2";
 
+  // HYPERLOOP - prefix
+  var HYPERLOOP_CHAR = 64; // @
+
   // The main exported interface (under `self.acorn` when in the
   // browser) is a `parse` function that takes a code string and
   // returns an abstract syntax tree as specified by [Mozilla parser
@@ -411,7 +414,7 @@
 
   // And the keywords.
 
-  var isKeyword = makePredicate("break case catch continue debugger default do else finally for function if return switch throw try var while with null true false instanceof typeof void delete new in this");
+  var isKeyword = makePredicate("break case catch continue debugger default do else finally for function if return switch throw try var while with null true false instanceof typeof void delete new in this @import @class @compiler");
 
   // ## Character categories
 
@@ -708,7 +711,7 @@
     // Identifier or keyword. '\uXXXX' sequences are allowed in
     // identifiers, so '\' also dispatches to that.
     // HYPERLOOP - allow @ to start words
-    if (isIdentifierStart(code) || code === 92 /* '\' */ || code === 64) return readWord();
+    if (isIdentifierStart(code) || code === 92 /* '\' */ || code === HYPERLOOP_CHAR) return readWord();
 
     var tok = getTokenFromCode(code);
 
@@ -886,7 +889,7 @@
     for (;;) {
       var ch = input.charCodeAt(tokPos);
       // HYPERLOOP - allow @ to start words
-      if (isIdentifierChar(ch) || ch === 64) {
+      if (isIdentifierChar(ch) || ch === HYPERLOOP_CHAR) {
         if (containsEsc) word += input.charAt(tokPos);
         ++tokPos;
       } else if (ch === 92) { // "\"
@@ -917,6 +920,8 @@
     var type = _name;
     if (!containsEsc) {
       if (isKeyword(word)) type = keywordTypes[word];
+      else if (word[0] === "@")
+        raise(tokStart, "'" + word + "' is an invalid a hyperloop instruction");
       else if (options.forbidReserved &&
                (options.ecmaVersion === 3 ? isReservedWord3 : isReservedWord5)(word) ||
                strict && isStrictReservedWord(word))
