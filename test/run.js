@@ -1,4 +1,5 @@
 var driver = require("./driver.js");
+require("./hyperloop/tests.js");
 require("./tests.js");
 
 var testsRun = 0, failed = 0;
