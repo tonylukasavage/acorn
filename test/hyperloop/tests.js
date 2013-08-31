@@ -445,4 +445,260 @@ test("var callback = @class('Classname', ['interface1', 'interface2'], function(
   ]
 });
 
+test("var callback = @class(function foo(sender) { NSLog('clicked on button=%@', sender); })", {
+  "type": "Program",
+  "start": 0,
+  "end": 86,
+  "body": [
+    {
+      "type": "VariableDeclaration",
+      "start": 0,
+      "end": 86,
+      "declarations": [
+        {
+          "type": "VariableDeclarator",
+          "start": 4,
+          "end": 86,
+          "id": {
+            "type": "Identifier",
+            "start": 4,
+            "end": 12,
+            "name": "callback"
+          },
+          "init": {
+            "type": "HyperloopClass",
+            "start": 15,
+            "end": 86,
+            "arguments": [
+              {
+                "type": "FunctionExpression",
+                "start": 22,
+                "end": 85,
+                "id": {
+                  "type": "Identifier",
+                  "start": 31,
+                  "end": 34,
+                  "name": "foo"
+                },
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "start": 35,
+                    "end": 41,
+                    "name": "sender"
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 43,
+                  "end": 85,
+                  "body": [
+                    {
+                      "type": "ExpressionStatement",
+                      "start": 45,
+                      "end": 83,
+                      "expression": {
+                        "type": "CallExpression",
+                        "start": 45,
+                        "end": 82,
+                        "callee": {
+                          "type": "Identifier",
+                          "start": 45,
+                          "end": 50,
+                          "name": "NSLog"
+                        },
+                        "arguments": [
+                          {
+                            "type": "Literal",
+                            "start": 51,
+                            "end": 73,
+                            "value": "clicked on button=%@",
+                            "raw": "'clicked on button=%@'"
+                          },
+                          {
+                            "type": "Identifier",
+                            "start": 75,
+                            "end": 81,
+                            "name": "sender"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "kind": "var"
+    }
+  ]
+});
+
+test("@import('UIKit/UIApplication');\n" +
+"@import('Foundation/NSLog');\n" +
+"\n" +
+"@compiler({\n" +
+"	cflags: ['-DDEBUG=1']\n" +
+"});\n" +
+"\n" +
+"var callback = @class(function foo(sender) {\n" +
+"	NSLog('clicked on button=%@', sender);\n" +
+"});", {
+  "type": "Program",
+  "start": 0,
+  "end": 190,
+  "body": [
+    {
+      "type": "HyperloopImport",
+      "start": 0,
+      "end": 31,
+      "arguments": [
+        {
+          "type": "Literal",
+          "start": 8,
+          "end": 29,
+          "value": "UIKit/UIApplication",
+          "raw": "'UIKit/UIApplication'"
+        }
+      ]
+    },
+    {
+      "type": "HyperloopImport",
+      "start": 32,
+      "end": 60,
+      "arguments": [
+        {
+          "type": "Literal",
+          "start": 40,
+          "end": 58,
+          "value": "Foundation/NSLog",
+          "raw": "'Foundation/NSLog'"
+        }
+      ]
+    },
+    {
+      "type": "HyperloopCompiler",
+      "start": 62,
+      "end": 100,
+      "arguments": [
+        {
+          "type": "ObjectExpression",
+          "start": 72,
+          "end": 98,
+          "properties": [
+            {
+              "key": {
+                "type": "Identifier",
+                "start": 75,
+                "end": 81,
+                "name": "cflags"
+              },
+              "value": {
+                "type": "ArrayExpression",
+                "start": 83,
+                "end": 96,
+                "elements": [
+                  {
+                    "type": "Literal",
+                    "start": 84,
+                    "end": 95,
+                    "value": "-DDEBUG=1",
+                    "raw": "'-DDEBUG=1'"
+                  }
+                ]
+              },
+              "kind": "init"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "VariableDeclaration",
+      "start": 102,
+      "end": 189,
+      "declarations": [
+        {
+          "type": "VariableDeclarator",
+          "start": 106,
+          "end": 189,
+          "id": {
+            "type": "Identifier",
+            "start": 106,
+            "end": 114,
+            "name": "callback"
+          },
+          "init": {
+            "type": "HyperloopClass",
+            "start": 117,
+            "end": 189,
+            "arguments": [
+              {
+                "type": "FunctionExpression",
+                "start": 124,
+                "end": 188,
+                "id": {
+                  "type": "Identifier",
+                  "start": 133,
+                  "end": 136,
+                  "name": "foo"
+                },
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "start": 137,
+                    "end": 143,
+                    "name": "sender"
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 145,
+                  "end": 188,
+                  "body": [
+                    {
+                      "type": "ExpressionStatement",
+                      "start": 148,
+                      "end": 186,
+                      "expression": {
+                        "type": "CallExpression",
+                        "start": 148,
+                        "end": 185,
+                        "callee": {
+                          "type": "Identifier",
+                          "start": 148,
+                          "end": 153,
+                          "name": "NSLog"
+                        },
+                        "arguments": [
+                          {
+                            "type": "Literal",
+                            "start": 154,
+                            "end": 176,
+                            "value": "clicked on button=%@",
+                            "raw": "'clicked on button=%@'"
+                          },
+                          {
+                            "type": "Identifier",
+                            "start": 178,
+                            "end": 184,
+                            "name": "sender"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "kind": "var"
+    }
+  ]
+});
+
 testFail("@foo", "'@foo' is an invalid a hyperloop instruction (1:0)");
